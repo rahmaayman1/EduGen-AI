@@ -20,7 +20,7 @@ def process_pdf(pdf_path: Path) -> ExtractedDocument:
     """Extract usable text from a PDF or raise a domain error if it is unusable."""
     try:
         all_pages = extract_pages(pdf_path)
-    except (pymupdf.FileDataError, pymupdf.EmptyFileError, FileNotFoundError) as exc:
+    except (pymupdf.FileDataError, pymupdf.EmptyFileError, pymupdf.FileNotFoundError) as exc:
         raise InvalidPDFError(f"Could not read PDF: {pdf_path.name}") from exc
 
     if not all_pages:
