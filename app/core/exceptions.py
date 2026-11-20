@@ -8,3 +8,7 @@ class InvalidPDFError(EduGenError):
 
 class ScannedDocumentError(EduGenError):
     """Raised when a PDF has too little extractable text (likely scanned)."""
+
+
+class FileTooLargeError(EduGenError):
+    """Raised when an uploaded file exceeds the allowed size."""
