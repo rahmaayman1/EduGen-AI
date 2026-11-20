@@ -6,9 +6,9 @@ from pathlib import Path
 import pymupdf
 
 MIN_CHARS_FOR_CONTENT = 20
-MIN_ARABIC_RATIO = 0.5
+MIN_EXPECTED_SCRIPT_RATIO = 0.5
 
-ARABIC_LETTER_PATTERN = re.compile(r"[\u0600-\u06FF]")
+EXPECTED_LETTER_PATTERN = re.compile(r"[\u0600-\u06FFA-Za-z]")
 ANY_LETTER_PATTERN = re.compile(r"[^\W\d_]")
 
 
@@ -32,9 +32,9 @@ def classify_page_text(text: str) -> PageStatus:
     if len(stripped) < MIN_CHARS_FOR_CONTENT:
         return PageStatus.EMPTY
 
-    arabic_count = len(ARABIC_LETTER_PATTERN.findall(stripped))
+    expected_count = len(EXPECTED_LETTER_PATTERN.findall(stripped))
     letter_count = len(ANY_LETTER_PATTERN.findall(stripped))
-    if letter_count == 0 or arabic_count / letter_count < MIN_ARABIC_RATIO:
+    if letter_count == 0 or expected_count / letter_count < MIN_EXPECTED_SCRIPT_RATIO:
         return PageStatus.GARBLED
 
     return PageStatus.OK

@@ -19,7 +19,8 @@ ARABIC_SENTENCE = "هذا درس عن الرياضة والحياة الصحية
         ("ا" * MIN_CHARS_FOR_CONTENT, PageStatus.OK),
         (ARABIC_SENTENCE, PageStatus.OK),
         ("这是一个关于体育的课程内容测试文本" * 3, PageStatus.GARBLED),
-        ("This is a lesson about sports and health", PageStatus.GARBLED),
+        ("This is a lesson about sports and health", PageStatus.OK),
+        ("هذا درس عن الرياضة Physical Education للطلاب", PageStatus.OK),
         ("12345 67890 12345 67890 12345 67890", PageStatus.GARBLED),
     ],
 )
