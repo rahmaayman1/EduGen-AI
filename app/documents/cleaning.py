@@ -5,6 +5,7 @@ FILLER_DOTS_PATTERN = re.compile(r"\.{4,}")
 BIDI_CONTROL_PATTERN = re.compile("[\u200e\u200f\u202a-\u202e\u2066-\u2069\u061c]")
 WHITESPACE_RUN_PATTERN = re.compile(r"[ \t]+")
 KASHIDA = "\u0640"
+BLANK_LINES_PATTERN = re.compile(r"\n\s*\n+")
 
 MIN_PAGES_FOR_BOILERPLATE_DETECTION = 3
 BOILERPLATE_PAGE_RATIO = 0.5
@@ -30,12 +31,18 @@ def collapse_whitespace(text: str) -> str:
     return WHITESPACE_RUN_PATTERN.sub(" ", text)
 
 
+def collapse_blank_lines(text: str) -> str:
+    """Replace runs of blank lines with a single newline."""
+    return BLANK_LINES_PATTERN.sub("\n", text)
+
+
 def clean_text(text: str) -> str:
     """Apply all single-page cleaning steps in a fixed order."""
     text = remove_bidi_marks(text)
     text = remove_kashida(text)
     text = remove_filler_dots(text)
     text = collapse_whitespace(text)
+    text = collapse_blank_lines(text)
     return text
 
 

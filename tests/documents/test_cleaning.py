@@ -2,6 +2,7 @@ import pytest
 
 from app.documents.cleaning import (
     clean_text,
+    collapse_blank_lines,
     collapse_whitespace,
     remove_bidi_marks,
     remove_filler_dots,
@@ -89,3 +90,15 @@ def test_remove_bidi_marks(text: str, expected: str) -> None:
 )
 def test_collapse_whitespace(text: str, expected: str) -> None:
     assert collapse_whitespace(text) == expected
+
+
+@pytest.mark.parametrize(
+    "text, expected",
+    [
+        ("سطر\n\n\n\nسطر", "سطر\nسطر"),
+        ("سطر\n \n \nسطر", "سطر\nسطر"),
+        ("سطر\nسطر", "سطر\nسطر"),
+    ],
+)
+def test_collapse_blank_lines(text: str, expected: str) -> None:
+    assert collapse_blank_lines(text) == expected
