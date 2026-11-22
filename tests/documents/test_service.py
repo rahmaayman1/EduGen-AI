@@ -50,3 +50,20 @@ def test_process_pdf_rejects_document_without_text(tmp_path: Path) -> None:
 
     with pytest.raises(ScannedDocumentError):
         process_pdf(pdf)
+
+
+def test_process_pdf_removes_repeated_header_lines(tmp_path: Path) -> None:
+    header = "Channel advertisement line"
+    pdf = create_pdf(
+        tmp_path / "lesson.pdf",
+        [
+            f"{header}\nFirst page lesson content about sports.",
+            f"{header}\nSecond page lesson content about health.",
+            f"{header}\nThird page lesson content about food.",
+        ],
+    )
+
+    result = process_pdf(pdf)
+
+    assert all(header not in page.text for page in result.pages)
+    assert "lesson content" in result.pages[0].text
