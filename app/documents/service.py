@@ -1,9 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import pymupdf
 
 from app.core.exceptions import InvalidPDFError, ScannedDocumentError
+from app.documents.cleaning import clean_text, remove_repeated_lines
 from app.documents.extractor import PageContent, PageStatus, extract_pages
 
 MIN_OK_PAGES_RATIO = 0.5
@@ -38,8 +39,13 @@ def process_pdf(pdf_path: Path) -> ExtractedDocument:
             f"Only {len(usable_pages)} of {len(all_pages)} pages contain readable text"
         )
 
+    cleaned_texts = remove_repeated_lines([clean_text(p.text) for p in usable_pages])
+    cleaned_pages = [
+        replace(page, text=text) for page, text in zip(usable_pages, cleaned_texts)
+    ]
+
     return ExtractedDocument(
-        pages=usable_pages,
+        pages=cleaned_pages,
         total_pages=len(all_pages),
         skipped_pages=len(all_pages) - len(usable_pages),
     )
