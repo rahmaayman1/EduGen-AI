@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     debug: bool = False
     max_upload_size_mb: int = 10
     storage_dir: Path = Path("storage")
+    gemini_api_key: str | None = None
+    llm_model: str = "gemini-2.5-flash"
+    llm_timeout_seconds: int = 60
 
     model_config = SettingsConfigDict(
         env_file=".env",

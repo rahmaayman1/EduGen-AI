@@ -12,3 +12,19 @@ class ScannedDocumentError(EduGenError):
 
 class FileTooLargeError(EduGenError):
     """Raised when an uploaded file exceeds the allowed size."""
+
+
+class LLMError(EduGenError):
+    """Base class for failures when calling the language model."""
+
+
+class LLMNotConfiguredError(LLMError):
+    """Raised when the LLM is used but no API key is configured."""
+
+
+class LLMUnavailableError(LLMError):
+    """Raised on timeouts, network failures, or exhausted quota."""
+
+
+class LLMResponseError(LLMError):
+    """Raised when the model returns output that is empty or invalid."""
